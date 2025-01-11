@@ -9,19 +9,18 @@ url=("https://ec.europa.eu/eurostat/databrowser/view/env_wasgen__custom_14750179
 
 st.write(f''' 
 ### Introduzione e descrizione dei dati oggetto di studio
-La seguente analisi verterà sulla generazione di rifiuti da parte dei Paesi Europei, con particolare attenzione alle attività economiche coinvolte, alla pericolosità dei rifiuti e all' evoluzione nel tempo della quantità prodotta.
+La seguente analisi verterà sulla *generazione di rifiuti* da parte dei Paesi Europei, con particolare attenzione alle attività economiche coinvolte, alla pericolosità dei rifiuti e all' evoluzione nel tempo della quantità prodotta.
 I dati in seguito analizzati sono stati ottenuti dal [sito Eurostat]({url}).
-\nIl periodo di riferimento è strutturato ad intervalli biennali e va dal 2004 al 2022. Per il primo anno di riferimento, il 2004, gli Stati membri hanno potuto chiedere l'autorizzazione a non fornire parte delle informazioni riguardante i rifiuti 
-dei settori "Agricolture and fishing" e "Services", perciò per alcuni paesi questi valori sono mancanti.         
-
 
 Le informazioni sono disaggregate per:
 -  **fonti**: 19 attività commerciali secondo la classificazione NACE rev.2 e attività delle famiglie in ambito domestico.
-             La generazione di rifiuti è, quindi, attribuita ad attività di produzione o di consumo.
+             La generazione di rifiuti è quindi attribuita ad attività di produzione o di consumo.
 -  **categorie** di rifiuti (secondo la Classificazione Europea dei Rifiuti a fini statistici). 
+\nIl **periodo di riferimento** è strutturato ad intervalli biennali e va dal 2004 al 2022.  Per il primo anno, il 2004, gli Stati membri hanno potuto chiedere l'autorizzazione a non fornire parte delle informazioni riguardante i rifiuti 
+dei settori "Agricolture and fishing" e "Services", perciò per alcuni paesi questi valori sono mancanti.         
 
-Tutti i valori sono misurati sia in tonnellate di rifiuti che in kg pro-capite, sulla base della media annua della popolazione.
-\nGli Stati membri sono liberi di decidere sulle modalità di raccolta dei dati. Le opzioni generali sono: indagini, fonti amministrative, stime statistiche o una combinazione di metodi.
+Le **misurazioni** sono disponibili sia in tonnellate di rifiuti che in kg pro-capite, sulla base della media annua della popolazione.
+\nGli Stati membri sono liberi di decidere sulle **modalità di raccolta** dei dati. Le opzioni generali sono: indagini, fonti amministrative, stime statistiche o una combinazione di metodi.
 
 Le informazioni sul trattamento dei rifiuti sono suddivise in 5 tipologie di trattamento (recupero, incenerimento con recupero energetico, 
 altri incenerimenti, smaltimento a terra e trattamento a terra) e in categorie di rifiuti.
@@ -30,7 +29,7 @@ altri incenerimenti, smaltimento a terra e trattamento a terra) e in categorie d
 ### Presentazione dei dati
 La tabella riporta i dati sulla produzione di rifiuti (in tonnellate) nei diversi settori economici per ogni paese europeo.
 
-Per comodità di rappresentazione si sono qui considerati i rifiuti pericolosi e non pericolosi nel loro totale.
+Per comodità di *rappresentazione* si sono qui considerati i rifiuti pericolosi e non pericolosi nel loro totale.
 
 L'esclusione dell'Albania è dovuta alla quasi totale assenza di dati in ogni anno/attività, per cui sarebbe risultato difficile fare un'analisi utile. 
 
@@ -67,27 +66,67 @@ data= (
     .sort(["nace_r2", "geo", "year"])  
     )
 
-
 # non serve metterli ma è da scrivere sul read i tentativi fatti !!!!
 prev_data= (
-    data
-    .group_by(["geo","nace_r2"])
-    .agg(pl.col("values").fill_null(strategy="forward").alias("previsioni"))
+    table()
+    #data
+    #.group_by(["geo","nace_r2"])
+    #.agg(pl.col("values").fill_null(strategy="forward").alias("previsioni"))
+    #.with_columns(previsioni=pl.col("2004").interpolate_by("2006"))
     .sort(["geo","nace_r2"])
 )
 #new_data= data.merge(prev_data, on="geo", how="left")
 
+st.write('''
+### Evoluzione temporale della produzione di rifiuti
+ Il seguente grafico mette in luce l'evoluzione negli anni dal 2004 al 2022 della produzione totale di rifiuti da parte dei paesi oggetto di studio nel loro complesso, senza distinzione per attività economica.
+\nNel periodo 2004 -2020 vengono considerati tutti i 27 paesi   , mentre per l'intervallo 2020 - 2022 i valori si riferiscono a 26 paesi in quanto L'Inghilterra, uscendo dall'UE, non ha più fornito i propri dati.
+  
+\nIl calo degli ultimi 4 anni (2020-2022) va quindi attribuito alla mancanza di un paese nel conteggio più che ad un' effettiva diminuzione della produzione di rifiuti. 
+Si può invece ipotizzare che, tenendo conto dell'andamento passato, il totale sarebbe stato in lieve aumento o pressocchè stazionario.
+         ''')
+data1= (table()
+        .unpivot(index=["geo", "nace_r2"], 
+                      value_name="values", 
+                      variable_name="year")
+        .filter(pl.col("geo") == ("European Union - 28 countries (2013-2020)" ),
+                pl.col("nace_r2") == "All NACE activities plus households")
+        .pivot(on="year", values="values")
+        .with_columns(pl.col("2020").fill_null(2153170000),
+                      pl.col("2022").fill_null(2233120000))
+        .unpivot(index=["geo", "nace_r2"], 
+                      value_name="values", 
+                      variable_name="year")
+        )
+# 2020 2153170000
+# 2022 2233120000
+ 
+line = alt.Chart(data1).mark_line(color="red").encode(
+    x=alt.X('year').axis(labelAngle=-40, titleColor="black", title="Years"),
+    y=alt.Y('values').axis(domain=False, titleAngle=0, titleAlign="right", title="Values", titleColor="black")
+    ).properties(width=600, height=400)
+
+bar= alt.Chart(data1).mark_bar(color="orange", opacity=0.4).encode(
+    x="year",
+    y="values"
+)
+bar+line
 
 
 
 st.write("""
-### Come si è evoluta la produzione di rifiuti nei vari stati nel corso degli anni?
+### Confronto tra paesi
+#### Come si è evoluta la produzione di rifiuti nei vari stati dal 2004 al 2022?
+Il grafico precedente permetteva di osservare l'andamento dei paesi nel loro complesso, ma che tipo di evoluzione ha avuto ogni singolo stato?
+Come si presenta rispetto agli altri?
+\nPer rispondere a queste domande è sufficiente selezionare uno o più stati dei quali si è interessati.
+Il grafico permette poi di effettuare un **confronto**, osservandone al contempo l'**evoluzione individuale**.
 
-Il seguente grafico consente di selezionare uno o più stati, osservandone l'evoluzione individuale, ma anche permettendo di effettuare un confronto nel tempo.
-         
-I valori per ogni anno corrispondo alla somma di rifiuti prodotti per ogni settore.
+Nell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno, i quali
+corrispondo alla somma di rifiuti prodotti per ogni settore.
 
-Posizionandosi con il cursore sopra alle linee è possibile visualizzare "un'etichetta" che riporta l'anno considerato, il nome del paese e il corrispettivo valore di rifiuti totali. 
+Man mano che verranno selezionati i paesi apparirà una legenda in basso con il nome dello stato e il rispettivo colore. 
+\n ! Posizionandosi con il cursore sopra alle linee è possibile visualizzare "un'etichetta" che riporta l'anno considerato, il nome del paese e il corrispettivo valore di rifiuti totali. 
 """)
 
 
@@ -105,15 +144,23 @@ def time_evolution():
         .filter(pl.col("geo").is_in(selected_country)),
         x="year",
         y="values",
-        color="geo"
+        color="geo",
+        use_container_width=True
     )
 
-st.write(time_evolution())
+time_evolution()
+
+st.write('''
+! osservazioni: Bulgaria interessante
+         
+
+         ''' )
+
 
 
 st.write('''
 ### Quali sono gli stati che producono la maggiore quantità di rifiuti in un dato anno (in tonnellate)?
-#### Confronto tra stati in base alla *pericolosità* dei rifiuti generati complessivamente da tutte le attività economiche 
+#### Confronto in base alla *pericolosità* dei rifiuti generati complessivamente da tutte le attività economiche 
 Il seguente grafico evidenzia quali sono gli stati che producono la maggiore quantità di scarti considerando la somma delle 
 tonnellate prodotte da ogni settore economico in riferimento all'anno selezionato .
 
@@ -147,11 +194,11 @@ def hazardness():
         ),
         use_container_width=True
     )
-st.write(hazardness())
+hazardness()
 
 
 st.write('''
-### Generazione di rifiuti pro-capite (in kg)
+### Generazione di rifiuti pro-capite (in kg) per settore
 Normalizzare i dati sulla produzione di rifiuti utilizzando la popolazione media di ciascun paese per ogni anno considerato permette di ottenere 
 valori che rendono possible il confronto tra paesi con dimensioni demografiche diverse.
          ''')
@@ -181,14 +228,14 @@ data_kg= (start_data
             .sort(["nace_r2", "geo", "year"])
         )
 base = alt.Chart(data_kg).encode(
-    x='kg_pro_capite:Q',
-    y=alt.Y("geo:O", sort="-x"),
+    y=alt.Y('kg_pro_capite:Q'),
+    x=alt.X("geo:O", sort="-y"),
     text='kg_pro_capite'
 )
-base.mark_bar() + base.mark_text(align='left', dx=2)
+base.mark_bar() + base.mark_text(align='center', dy=-6)
 
 st.write('''
-    ### Cartina dell'Europa: massima produzione di rifiuti totale pro-capite (in kg) per settore
+    ### Cartina dell'Europa
 
     ** commento ***
          ''')
@@ -230,7 +277,9 @@ add_map(complete)
 
 
 st.write('''
+## Correlazione tra PIL e totale di rifiuti prodotti
 ### Che tipo di correlazione c'è tra il valore del PIL (Prodotto Interno Lordo) e la quantità di rifiuti prodotti?
+
 Il seguente grafico di dispersione rappresenta la correlazione tra la crescita economica pro capite e la produzione di rifiuti pro capite (in kg). 
 Il legame è evidenziato da una retta di regressione.         
          ''')
@@ -272,7 +321,7 @@ line= alt.Chart(GDP_waste).mark_point().encode(
         x='GDP_per_capita:Q',
         y='kg_pro_capite').transform_regression('GDP_per_capita', 'kg_pro_capite').mark_line(color="red")
 
-points= alt.Chart(GDP_waste).mark_point().encode(
+points= alt.Chart(GDP_waste).mark_point(fill="blue").encode(
         x='GDP_per_capita:Q',
         y='kg_pro_capite:Q',
         tooltip=["geo:N", "kg_pro_capite", "GDP_per_capita"]
