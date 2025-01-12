@@ -196,7 +196,7 @@ st.write('''
 #### Confronto in base alla *pericolosità* dei rifiuti senza distinzione tra le attività economiche 
 Il seguente grafico evidenzia quali sono gli stati che producono la **maggiore quantità di scarti** considerando la somma delle 
 tonnellate prodotte da ogni settore economico in riferimento all'anno selezionato. E' possibile scegliere l'anno che si desidera considerare.
-\nNell'asse delle ascisse è riportato il *valore* della quantità di rifuti prodotti in tonnellate, mentre in quello delle ordinate gli *stati*.
+\nNell'asse delle ascisse è riportato il *valore* della quantità di rifuti prodotti in tonnellate, mentre in quello delle ordinate gli *stati*.         
 
 \n 💡 _Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il nome del paese e il corrispettivo valore di rifiuti totali_
 
@@ -237,8 +237,14 @@ st.write('''
 ### Correlazione tra PIL e totale di rifiuti prodotti (pro capite)
 Il seguente grafico di dispersione rappresenta la correlazione tra la **crescita economica pro capite** e la produzione di **rifiuti pro capite (in kg)**. 
 Ogni :blue[punto] rappresenta un paese e il legame tra questi è evidenziato da una retta di regressione :red[rossa].   
-
-\n 💡 _Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro-capite* e il *PIL pro capite*_. 
+\nNell'asse delle ascisse è riportato il valore del *PIL pro capite*, mentre in quello delle ordinate i *kg pro capite* di rifiuti generati.
+         
+\n E' da notare  la presenza di alcuni **valori anomali** (detti "outliers") che influenzano la retta di regressione diminuendone la pendenza. 
+ La retta non sembra infatti adattarsi al meglio ai dati, nonostante sembri esserci una correlazione tra le due variabili.
+ Anche la scarsa numerosità di dati(solo 27) non aiuta, ma è visibile una **correlazione positiva** per cui si può affermare che, 
+ generalmente, all'aumentare del valore del PIL pro-capite aumenta il valore di kg di rifiuti prodotti pro capite.   
+         
+\n 💡 _Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro capite* e il *PIL pro capite*_. 
       
          ''')
 
@@ -292,8 +298,6 @@ points+line
 # scrivere mettendo in evidenza gli outliers e l'effetto che hanno sulla correlzaione
 
 
-# da provare eventualmente grafico di distribuzione, anche se i dati non si prestano particolarmente 
-
 st.divider()
 
 st.write('''
@@ -305,12 +309,15 @@ Ciò implica che stati più grandi e più densamente popolati produrranno una ma
 \nIn questa sezione è possibile scegliere l'**anno** e il **settore economico** dei dati che si è interessati a visualizzare.
          ''')
 
-if st.button("📍 Consigli su cosa cercare"):
+if st.button("📍 Suggerimenti "):
     st.write('''
-- anno: **2018, 2020, 2022** / settore: **"Household"**
-> Greta Thumberg con il suo movimento "Fridays for Future" ha portato ad una presa di coscenza da parte delle persone sui loro consumi/sprechi?
-
+Le possibilità sono molteplici, qui vi sono solo alcune idee:
 - settore: **"All NACE activities plus households"**
+> Ancora una volta si possono considerare le attività nel loro complesso, ma in questo caso con misurazione in kg pro-capite
+             
+- anni: **2018, 2020, 2022** / settore: **"Household"**
+> Potrebbe essere interessante considerare l'ambito familiare, quindi ciò che riguarda i consumi domestici, in quanto non è limitato alle attività economiche ma rigurda tutte le persone. 
+  In particolare si possono considerare gli ultimi anni caratterizzati da un'emergenza climatica sempre più allarmante. Quanto può questo aver influenzato i consumi domestici nei diversi paesi? 
              
              ''')
 
@@ -358,7 +365,7 @@ st.write('''
 Un'ulteriore rappresentazione che permette un confronto visivo più chiaro è la seguente cartina d'Europa.
 \nOgni pease è colorato secondo una **scala di colori** che va dal :orange[giallo] al :red[rosso], ovvero da una più bassa produzione di rifuti pro-capite ad una più alta.
 Vengono indicati in :grey[grigio] tutti gli stati che non sono oggetto di studio in quanto non appartenenti all'Unione Europea o che appartengono ma non  presentano dati per l'anno/settore selezionati.
-\nA lato è presente una legenda che mostra l'associazione tra colore e valore. Vista la natura dei dati, per rendere visibile la differenza tra paesi si è adottata una scala "square root".
+\nA lato è presente una **legenda** che mostra l'associazione tra colore e valore. Vista la natura dei dati, per rendere visibile la differenza tra paesi si è adottata una scala "square root".
 \n 💡 _Posizionandosi con il cursore sopra agli stati colorati nella cartina è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e il corrispettivo *valore* di rifiuti prodotti in kg pro-capite_ 
 
          ''')
@@ -396,3 +403,10 @@ complete = (world + chart).project(
         center=(10, 48)
 )
 add_map(complete)
+
+st.divider()
+
+st.write('''
+### Conclusioni
+         
+         ''')
