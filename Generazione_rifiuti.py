@@ -3,12 +3,26 @@ import streamlit as st
 import altair as alt
 import geopandas as gpd
 
+with st.sidebar:
+    st.write('''
+# Indice:
+- Introduzione e descrizione dei dati
+- Presentazione dei dati
+- Evoluzione temporale 
+    - Confronto tra paesi
+- Produzione di rifiuti totale per pericolosità
+- Generazione di rifiuti pro-capite (in kg) per settore
+    - Grafico a barre
+    - Cartina d'Europa
+- Correlazione tra PIL e totale di rifiuti prodotti
+- Conclusioni             
+             ''')
 
 st.write(" # Produzione di rifiuti in Europa")
 url=("https://ec.europa.eu/eurostat/databrowser/view/env_wasgen__custom_14750179/default/table?lang=en")
 
 st.write(f''' 
-### Introduzione e descrizione dei dati oggetto di studio
+### Introduzione e descrizione dei dati
 La seguente analisi verterà sulla *generazione di rifiuti* da parte dei Paesi Europei, con particolare attenzione alle attività economiche coinvolte, alla pericolosità dei rifiuti e all' evoluzione nel tempo della quantità prodotta.
 I dati in seguito analizzati sono stati ottenuti dal [sito Eurostat]({url}).
 
@@ -30,7 +44,7 @@ st.divider()
 
 st.write('''
 ### Presentazione dei dati
-La tabella riporta i dati sulla produzione di rifiuti (in tonnellate) nei diversi settori economici per ogni paese membro dell'UE.
+La **tabella** riporta i dati sulla produzione di rifiuti (in tonnellate) nei diversi settori economici per ogni paese membro dell'UE.
 
 Per comodità di *rappresentazione* si sono qui considerati i rifiuti pericolosi e non pericolosi nel loro totale.
 L'esclusione dell'Albania è dovuta alla quasi totale assenza di dati in ogni anno/attività. 
@@ -215,6 +229,17 @@ Ciò implica che stati più grandi e più densamente popolati produrranno una ma
 \nIn questa sezione è possibile scegliere l'anno e il settore economico dei dati che si è interessati a visualizzare.
          ''')
 
+if st.button("Consigli su cosa cercare", type="secondary", icon="🔎"):
+    st.write('''
+- anno: **2018, 2020, 2022** / settore: **"Household"**
+            \n Greta Thumberg con il suo movimento "Fridays for Future" ha portato ad una presa di coscenza da parte delle persone sui loro consumi/sprechi?
+
+- settore: **"All NACE activities plus households"**
+             
+- anno: **2006, 2008, 2010**
+            \n La crisi del 2008 ha portato a qualche aumento/diminuzione anomala in qualche settore per qualche paese?
+             ''')
+
 def select_activity(key):
     activities= data.select("nace_r2").unique().sort("nace_r2")
     activity= st.selectbox("Seleziona il settore", activities, key= key)
@@ -300,10 +325,11 @@ st.divider()
 
 st.write('''
 ### Correlazione tra PIL e totale di rifiuti prodotti
-#### Che tipo di correlazione c'è tra il valore del PIL (Prodotto Interno Lordo) e la quantità di rifiuti prodotti?
-
 Il seguente grafico di dispersione rappresenta la correlazione tra la crescita economica pro capite e la produzione di rifiuti pro capite (in kg). 
-Il legame è evidenziato da una retta di regressione.         
+Ogni punto rappresenta un paese e il legame tra questi è evidenziato da una retta di regressione rossa.   
+
+\n! Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro-capite* e il *PIL pro capite*. 
+      
          ''')
 
 @st.cache_data
