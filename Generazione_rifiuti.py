@@ -4,8 +4,9 @@ import altair as alt
 import geopandas as gpd
 
 with st.sidebar:
+    st.title("Indice")
+    st.divider()
     st.write('''
-# Indice:
 - Introduzione e descrizione dei dati
 - Presentazione dei dati
 - Evoluzione temporale 
@@ -15,8 +16,10 @@ with st.sidebar:
     - Grafico a barre
     - Cartina d'Europa
 - Correlazione tra PIL e totale di rifiuti prodotti
-- Conclusioni             
+- Conclusioni          
              ''')
+    st.divider()
+
 
 st.write(" # Produzione di rifiuti in Europa")
 url=("https://ec.europa.eu/eurostat/databrowser/view/env_wasgen__custom_14750179/default/table?lang=en")
@@ -30,13 +33,14 @@ Le informazioni sono disaggregate per:
 -  **fonti**: 19 attività commerciali secondo la classificazione NACE rev.2 e attività delle famiglie in ambito domestico.
              La generazione di rifiuti è quindi attribuita ad attività di produzione o di consumo.
 -  **categorie** di rifiuti (secondo la Classificazione Europea dei Rifiuti a fini statistici). 
-\nIl **periodo di riferimento** è strutturato ad intervalli biennali e va dal 2004 al 2022.  Per il primo anno, il 2004, gli Stati membri hanno potuto chiedere l'autorizzazione a non fornire parte delle informazioni riguardante i rifiuti 
+> Il **periodo di riferimento** è strutturato ad intervalli biennali e va dal 2004 al 2022.  Per il primo anno, il 2004, gli Stati membri hanno potuto chiedere l'autorizzazione a non fornire parte delle informazioni riguardante i rifiuti 
 dei settori "Agricolture and fishing" e "Services", perciò per alcuni paesi questi valori sono mancanti.         
 
-Le **misurazioni** sono disponibili sia in tonnellate di rifiuti che in kg pro-capite, sulla base della media annua della popolazione.
-\nGli Stati membri sono liberi di decidere sulle **modalità di raccolta** dei dati. Le opzioni generali sono: indagini, fonti amministrative, stime statistiche o una combinazione di metodi.
+> Le **misurazioni** sono disponibili sia in tonnellate di rifiuti che in kg pro-capite, sulla base della media annua della popolazione.
 
-Le informazioni sul trattamento dei rifiuti sono suddivise in 5 tipologie di trattamento (recupero, incenerimento con recupero energetico, 
+\nGli Stati membri sono liberi di decidere sulle **modalità di raccolta** dei dati, ma le opzioni generali sono: indagini, fonti amministrative, stime statistiche o una combinazione di metodi.
+
+Le informazioni sul trattamento dei rifiuti sono suddivise in 5 tipologie di **trattamento** (recupero, incenerimento con recupero energetico, 
 altri incenerimenti, smaltimento a terra e trattamento a terra) e in categorie di rifiuti.
 ''')
 
@@ -100,10 +104,10 @@ st.write('''
  Il seguente grafico mette in luce l'evoluzione della produzione *totale* di rifiuti negli anni dal 2004 al 2022 da parte dei paesi oggetto di studio **nel loro complesso**, senza distinzione per attività economica.
 \nNel periodo 2004 -2020 vengono considerati **tutti i 27 paesi**   , mentre per l'intervallo 2020 - 2022 i valori si riferiscono a 26 paesi in quanto L'Inghilterra, uscendo dall'UE, non ha più fornito i propri dati.
   
-\nIl calo degli ultimi 2 anni (2020-2022) va quindi attribuito alla mancanza di un paese nel conteggio più che ad un' effettiva diminuzione della produzione di rifiuti. 
+\nIl calo degli ultimi 2 anni (2020-2022) va attribuito alla mancanza di un paese nel conteggio più che ad un' effettiva diminuzione della produzione di rifiuti. 
 Si può invece ipotizzare che, tenendo conto dell'andamento passato, il totale sarebbe stato in lieve aumento o pressocchè stazionario.
-\nNell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno in tonnellate.
-\n ! Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il corrispettivo anno e il valore di rifiuti totali. 
+\n Nell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno in tonnellate.
+\n 💡 _Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il corrispettivo anno e il valore di rifiuti totali_
 
          ''')
 data1= (table()
@@ -118,10 +122,11 @@ data1= (table()
         .unpivot(index=["geo", "nace_r2"], 
                       value_name="values", 
                       variable_name="year")
+        .select(pl.col("*").exclude("geo", "nace_r2"))
         )
 # 2020 2153170000
 # 2022 2233120000
- 
+
 line = alt.Chart(data1).mark_line(color="red").encode(
     x=alt.X('year').axis(labelAngle=-40, titleColor="black", title="Years"),
     y=alt.Y('values').axis(domain=False, titleAngle=0, titleAlign="right", title="Tonnes", titleColor="black")
@@ -131,7 +136,10 @@ bar= alt.Chart(data1).mark_bar(color="orange", opacity=0.4).encode(
     x="year",
     y="values"
 )
-bar+line
+tab1, tab2 = st.tabs(["📈 Chart", "🗃 Data"])
+tab1.altair_chart(bar+line)
+tab2.write(data1)
+
 
 st.divider()
 
@@ -146,7 +154,7 @@ Il grafico permette poi di effettuare un **confronto**, osservandone al contempo
 Nell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno, i quali
 corrispondo alla somma di rifiuti prodotti per ogni settore.
 Man mano che verranno selezionati i paesi apparirà una legenda sotto al grafico con il nome dello stato e il rispettivo colore. 
-\n ! Posizionandosi con il cursore sopra alle linee è possibile visualizzare "un'etichetta" che riporta l'anno considerato, il nome del paese e il corrispettivo valore di rifiuti totali. 
+\n 💡 _Posizionandosi con il cursore sopra alle linee è possibile visualizzare "un'etichetta" che riporta l'anno considerato, il nome del paese e il corrispettivo valore di rifiuti totali_
 """)
 
 
@@ -170,11 +178,15 @@ def time_evolution():
 
 time_evolution()
 
-st.write('''
-! osservazioni: Bulgaria interessante
-         
 
+if st.button("Osservazioni", icon="🔎"):
+    st.write('''
+        Alcuni paesi mostrano un andamento *crescente*, ma la maggior parte rimane pressocchè *stazionaria* attorno ad un valore.
+        E' interessante, invece, notare come **Spagna**, **Romania** e **Bulgaria** abbiano un andamento *complessivamente decrescente*. 
+        In particolare la Romania presenta un abbassamento significativo nel 2006 e 2012, mentre la Bulgaria a partire dal 2014.
          ''' )
+
+
 
 st.divider()
 
@@ -185,7 +197,7 @@ Il seguente grafico evidenzia quali sono gli stati che producono la **maggiore q
 tonnellate prodotte da ogni settore economico in riferimento all'anno selezionato. E' possibile scegliere l'anno che si desidera considerare.
 \nNell'asse delle ascisse è riportato il *valore* della quantità di rifuti prodotti in tonnellate, mentre in quello delle ordinate gli *stati*.
 
-\n ! Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il nome del paese e il corrispettivo valore di rifiuti totali. 
+\n 💡 _Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il nome del paese e il corrispettivo valore di rifiuti totali_
 
          ''' )
 
@@ -224,20 +236,20 @@ st.write('''
 ### Generazione di rifiuti pro-capite (in kg) per settore
 I 27 paesi membri dell'UE presentano naturalmente dimensioni geografiche, e quindi demografiche, diverse.
 Ciò implica che stati più grandi e più densamente popolati produrranno una maggiore quantità di rifiuti rispetto a quelli più piccoli.
-\nAllora la domanda che sorge è: come possiamo rendere i paesi confrontabili?
+\nAllora la domanda che sorge spontanea è: come possiamo rendere i paesi confrontabili?
     Consideriamo un'altra unità di misura che li metta tutti sullo stesso piano: i kg pro-capite.
 \nIn questa sezione è possibile scegliere l'anno e il settore economico dei dati che si è interessati a visualizzare.
          ''')
 
-if st.button("Consigli su cosa cercare", type="secondary", icon="🔎"):
+if st.button("📍 Consigli su cosa cercare"):
     st.write('''
 - anno: **2018, 2020, 2022** / settore: **"Household"**
-            \n Greta Thumberg con il suo movimento "Fridays for Future" ha portato ad una presa di coscenza da parte delle persone sui loro consumi/sprechi?
+> Greta Thumberg con il suo movimento "Fridays for Future" ha portato ad una presa di coscenza da parte delle persone sui loro consumi/sprechi?
 
 - settore: **"All NACE activities plus households"**
              
 - anno: **2006, 2008, 2010**
-            \n La crisi del 2008 ha portato a qualche aumento/diminuzione anomala in qualche settore per qualche paese?
+> La crisi del 2008 ha portato a qualche aumento/diminuzione anomala in qualche settore per qualche paese?
              ''')
 
 def select_activity(key):
@@ -265,6 +277,8 @@ data_kg= (start_data
             .sort(["nace_r2", "geo", "year"])
         )
 
+st.divider()
+
 st.write('''
 ##### $Grafico$ $a$ $barre$
 Una prima visualizzazione dei dati è fornita dal seguente grafico avente nell'asse delle ascisse i *paesi* e in quello delle ordinate i *rifiuti in kg pro-capite*.
@@ -280,10 +294,10 @@ base.mark_bar() + base.mark_text(align='center', dy=-6)
 st.write('''
     ##### $Cartina$ $dell'Europa$
 Un'ulteriore rappresentazione che permette un confronto visivo più chiaro è la seguente cartina d'Europa.
-\nOgni pease è colorato secondo una scala di colori che va dal giallo al rosso, ovvero da una più bassa produzione di rifuti pro-capite ad una più alta.
-Vengono indicati in grigio tutti gli stati che non sono oggetto di studio in quanto non appartenenti all'Unione Europea o che appartengono ma non  presentano dati per l'anno/settore selezionati.
+\nOgni pease è colorato secondo una scala di colori che va dal :orange[giallo] al :red[rosso], ovvero da una più bassa produzione di rifuti pro-capite ad una più alta.
+Vengono indicati in :grey[grigio] tutti gli stati che non sono oggetto di studio in quanto non appartenenti all'Unione Europea o che appartengono ma non  presentano dati per l'anno/settore selezionati.
 \nA lato è presente una legenda che mostra l'associazione tra colore e valore. Vista la natura dei dati, per rendere visibile la differenza tra paesi si è adottata una scala "square root".
-\n ! Posizionandosi con il cursore sopra agli stati colorati nella cartina è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e il corrispettivo *valore* di rifiuti prodotti in kg pro-capite. 
+\n 💡 _Posizionandosi con il cursore sopra agli stati colorati nella cartina è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e il corrispettivo *valore* di rifiuti prodotti in kg pro-capite_ 
 
          ''')
 
@@ -325,10 +339,10 @@ st.divider()
 
 st.write('''
 ### Correlazione tra PIL e totale di rifiuti prodotti
-Il seguente grafico di dispersione rappresenta la correlazione tra la crescita economica pro capite e la produzione di rifiuti pro capite (in kg). 
-Ogni punto rappresenta un paese e il legame tra questi è evidenziato da una retta di regressione rossa.   
+Il seguente grafico di dispersione rappresenta la correlazione tra la **crescita economica pro capite** e la produzione di **rifiuti pro capite (in kg)**. 
+Ogni :blue[punto] rappresenta un paese e il legame tra questi è evidenziato da una retta di regressione :red[rossa].   
 
-\n! Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro-capite* e il *PIL pro capite*. 
+\n 💡 _Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro-capite* e il *PIL pro capite*_. 
       
          ''')
 
@@ -383,3 +397,4 @@ points+line
 
 
 # da provare eventualmente grafico di distribuzione, anche se i dati non si prestano particolarmente 
+
