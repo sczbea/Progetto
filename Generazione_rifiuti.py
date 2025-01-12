@@ -240,7 +240,7 @@ Ogni :blue[punto] rappresenta un paese e il legame tra questi è evidenziato da 
 \nNell'asse delle ascisse è riportato il valore del *PIL pro capite*, mentre in quello delle ordinate i *kg pro capite* di rifiuti generati.
          
 \n E' da notare  la presenza di alcuni **valori anomali** (detti "outliers") che influenzano la retta di regressione diminuendone la pendenza. 
- La retta non sembra infatti adattarsi al meglio ai dati, nonostante sembri esserci una correlazione tra le due variabili.
+ La retta non sembra, infatti, adattarsi al meglio ai dati, nonostante parga esserci una correlazione tra le due variabili.
  Anche la scarsa numerosità di dati(solo 27) non aiuta, ma è visibile una **correlazione positiva** per cui si può affermare che, 
  generalmente, all'aumentare del valore del PIL pro-capite aumenta il valore di kg di rifiuti prodotti pro capite.   
          
