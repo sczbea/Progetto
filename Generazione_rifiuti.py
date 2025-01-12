@@ -11,11 +11,11 @@ with st.sidebar:
 - Presentazione dei dati
 - Evoluzione temporale 
     - Confronto tra paesi
-- Produzione di rifiuti totale per pericolosità
+- Produzione totale di rifiuti per pericolosità
+- Correlazione tra PIL e totale di rifiuti prodotti (pro capite)
 - Generazione di rifiuti pro-capite (in kg) per settore
     - Grafico a barre
     - Cartina d'Europa
-- Correlazione tra PIL e totale di rifiuti prodotti
 - Conclusioni          
              ''')
     st.divider()
@@ -101,7 +101,8 @@ st.divider()
 
 st.write('''
 ### Evoluzione temporale della produzione di rifiuti
- Il seguente grafico mette in luce l'evoluzione della produzione *totale* di rifiuti negli anni dal 2004 al 2022 da parte dei paesi oggetto di studio **nel loro complesso**, senza distinzione per attività economica.
+#### Considerazione dei 27 paesi UE nel loro complesso         
+ Il seguente grafico mette in luce l'evoluzione della produzione **totale** di rifiuti negli anni dal 2004 al 2022 da parte dei paesi oggetto di studio, **senza distinzione per attività economica**.
 \nNel periodo 2004 -2020 vengono considerati **tutti i 27 paesi**   , mentre per l'intervallo 2020 - 2022 i valori si riferiscono a 26 paesi in quanto L'Inghilterra, uscendo dall'UE, non ha più fornito i propri dati.
   
 \nIl calo degli ultimi 2 anni (2020-2022) va attribuito alla mancanza di un paese nel conteggio più che ad un' effettiva diminuzione della produzione di rifiuti. 
@@ -191,7 +192,7 @@ if st.button("Osservazioni", icon="🔎"):
 st.divider()
 
 st.write('''
-### Quali stati producono la maggiore quantità di rifiuti in un dato anno ?
+### Produzione totale di rifiuti
 #### Confronto in base alla *pericolosità* dei rifiuti senza distinzione tra le attività economiche 
 Il seguente grafico evidenzia quali sono gli stati che producono la **maggiore quantità di scarti** considerando la somma delle 
 tonnellate prodotte da ogni settore economico in riferimento all'anno selezionato. E' possibile scegliere l'anno che si desidera considerare.
@@ -233,112 +234,7 @@ hazardness()
 st.divider()
 
 st.write('''
-### Generazione di rifiuti pro-capite (in kg) per settore
-I 27 paesi membri dell'UE presentano naturalmente dimensioni geografiche, e quindi demografiche, diverse.
-Ciò implica che stati più grandi e più densamente popolati produrranno una maggiore quantità di rifiuti rispetto a quelli più piccoli.
-\nAllora la domanda che sorge spontanea è: come possiamo rendere i paesi confrontabili?
-    Consideriamo un'altra unità di misura che li metta tutti sullo stesso piano: i kg pro-capite.
-\nIn questa sezione è possibile scegliere l'anno e il settore economico dei dati che si è interessati a visualizzare.
-         ''')
-
-if st.button("📍 Consigli su cosa cercare"):
-    st.write('''
-- anno: **2018, 2020, 2022** / settore: **"Household"**
-> Greta Thumberg con il suo movimento "Fridays for Future" ha portato ad una presa di coscenza da parte delle persone sui loro consumi/sprechi?
-
-- settore: **"All NACE activities plus households"**
-             
-- anno: **2006, 2008, 2010**
-> La crisi del 2008 ha portato a qualche aumento/diminuzione anomala in qualche settore per qualche paese?
-             ''')
-
-def select_activity(key):
-    activities= data.select("nace_r2").unique().sort("nace_r2")
-    activity= st.selectbox("Seleziona il settore", activities, key= key)
-    return activity
-
-
-year= select_year("key1")
-nace= select_activity("key2")
-
-data_kg= (start_data
-            .filter(pl.col("unit") == "Kilograms per capita",
-                pl.col("hazard") == "Hazardous and non-hazardous - total",
-                pl.col("geo")!= "European Union - 27 countries (from 2020)",
-                pl.col("geo") != "European Union - 28 countries (2013-2020)",
-                pl.col("nace_r2") == nace,
-                pl.col("TIME_PERIOD") == year)
-            .select(pl.col("*").exclude("hazard", "unit", "waste"))
-            .pivot(on="TIME_PERIOD", values= "OBS_VALUE")
-            .unpivot(index=["geo", "nace_r2"], 
-                    value_name="kg_pro_capite", 
-                    variable_name="year")
-            .with_columns(pl.col("kg_pro_capite").cast(pl.Float64))
-            .sort(["nace_r2", "geo", "year"])
-        )
-
-st.divider()
-
-st.write('''
-##### $Grafico$ $a$ $barre$
-Una prima visualizzazione dei dati è fornita dal seguente grafico avente nell'asse delle ascisse i *paesi* e in quello delle ordinate i *rifiuti in kg pro-capite*.
-Sopra ad ogni barra vi è il valore di rifiuti corrispondente al paese per l'anno e il settore selezionati.
-''')
-base = alt.Chart(data_kg).encode(
-    y=alt.Y('kg_pro_capite:Q').axis(titleColor="black"),
-    x=alt.X("geo:O", sort="-y").axis(titleColor="black"),
-    text='kg_pro_capite'
-)
-base.mark_bar() + base.mark_text(align='center', dy=-6)
-
-st.write('''
-    ##### $Cartina$ $dell'Europa$
-Un'ulteriore rappresentazione che permette un confronto visivo più chiaro è la seguente cartina d'Europa.
-\nOgni pease è colorato secondo una scala di colori che va dal :orange[giallo] al :red[rosso], ovvero da una più bassa produzione di rifuti pro-capite ad una più alta.
-Vengono indicati in :grey[grigio] tutti gli stati che non sono oggetto di studio in quanto non appartenenti all'Unione Europea o che appartengono ma non  presentano dati per l'anno/settore selezionati.
-\nA lato è presente una legenda che mostra l'associazione tra colore e valore. Vista la natura dei dati, per rendere visibile la differenza tra paesi si è adottata una scala "square root".
-\n 💡 _Posizionandosi con il cursore sopra agli stati colorati nella cartina è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e il corrispettivo *valore* di rifiuti prodotti in kg pro-capite_ 
-
-         ''')
-
-@st.cache_data   
-def get_geography():
-    url = "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip"
-    dati = gpd.read_file(url)
-    return dati
-
-world= get_geography()
-data = world.merge(data_kg.to_pandas(), left_on="ADMIN", right_on="geo")
-
-def add_map(chart):
-    chart.save("map.html")
-    with open("map.html") as fp:
-        st.components.v1.html(fp.read(), width=800, height=800)
-world = (
-    alt.Chart(world)
-    .properties(width=600, height=600)
-    .mark_geoshape(color="lightgray", stroke="white")
-)
-chart = (
-    alt.Chart(data)
-    .properties(width=600, height=600)
-    .mark_geoshape(stroke="white")
-    .encode(
-        alt.Color("kg_pro_capite").scale(scheme="yelloworangered", type="sqrt"), 
-        alt.Tooltip(["ADMIN", "kg_pro_capite"])
-    )
-)
-complete = (world + chart).project(  
-        type="azimuthalEqualArea",
-        scale=700,
-        center=(10, 48)
-)
-add_map(complete)
-
-st.divider()
-
-st.write('''
-### Correlazione tra PIL e totale di rifiuti prodotti
+### Correlazione tra PIL e totale di rifiuti prodotti (pro capite)
 Il seguente grafico di dispersione rappresenta la correlazione tra la **crescita economica pro capite** e la produzione di **rifiuti pro capite (in kg)**. 
 Ogni :blue[punto] rappresenta un paese e il legame tra questi è evidenziato da una retta di regressione :red[rossa].   
 
@@ -398,3 +294,105 @@ points+line
 
 # da provare eventualmente grafico di distribuzione, anche se i dati non si prestano particolarmente 
 
+st.divider()
+
+st.write('''
+### Generazione di rifiuti pro-capite (in kg) per settore
+I 27 paesi membri dell'UE presentano naturalmente **dimensioni** geografiche, e quindi demografiche, **diverse**.
+Ciò implica che stati più grandi e più densamente popolati produrranno una maggiore quantità di rifiuti rispetto a quelli più piccoli.
+\nAllora la domanda che sorge spontanea è: come possiamo rendere i paesi confrontabili?
+    Consideriamo un'altra unità di misura che li metta tutti sullo stesso piano: i kg pro-capite.
+\nIn questa sezione è possibile scegliere l'**anno** e il **settore economico** dei dati che si è interessati a visualizzare.
+         ''')
+
+if st.button("📍 Consigli su cosa cercare"):
+    st.write('''
+- anno: **2018, 2020, 2022** / settore: **"Household"**
+> Greta Thumberg con il suo movimento "Fridays for Future" ha portato ad una presa di coscenza da parte delle persone sui loro consumi/sprechi?
+
+- settore: **"All NACE activities plus households"**
+             
+             ''')
+
+def select_activity(key):
+    activities= data.select("nace_r2").unique().sort("nace_r2")
+    activity= st.selectbox("Seleziona il settore", activities, key= key)
+    return activity
+
+
+year= select_year("key1")
+nace= select_activity("key2")
+
+data_kg= (start_data
+            .filter(pl.col("unit") == "Kilograms per capita",
+                pl.col("hazard") == "Hazardous and non-hazardous - total",
+                pl.col("geo")!= "European Union - 27 countries (from 2020)",
+                pl.col("geo") != "European Union - 28 countries (2013-2020)",
+                pl.col("nace_r2") == nace,
+                pl.col("TIME_PERIOD") == year)
+            .select(pl.col("*").exclude("hazard", "unit", "waste"))
+            .pivot(on="TIME_PERIOD", values= "OBS_VALUE")
+            .unpivot(index=["geo", "nace_r2"], 
+                    value_name="kg_pro_capite", 
+                    variable_name="year")
+            .with_columns(pl.col("kg_pro_capite").cast(pl.Float64))
+            .sort(["nace_r2", "geo", "year"])
+        )
+
+st.divider()
+
+st.write('''
+##### $Grafico$ $a$ $barre$
+Una prima visualizzazione dei dati è fornita dal seguente grafico avente nell'asse delle ascisse i *paesi* e in quello delle ordinate i *rifiuti in kg pro-capite*.
+Sopra ad ogni barra vi è il valore di rifiuti corrispondente al paese per l'anno e il settore selezionati.
+''')
+base = alt.Chart(data_kg).encode(
+    y=alt.Y('kg_pro_capite:Q').axis(titleColor="black"),
+    x=alt.X("geo:O", sort="-y").axis(titleColor="black"),
+    text='kg_pro_capite'
+)
+base.mark_bar() + base.mark_text(align='center', dy=-6)
+
+st.write('''
+    ##### $Cartina$ $dell'Europa$
+Un'ulteriore rappresentazione che permette un confronto visivo più chiaro è la seguente cartina d'Europa.
+\nOgni pease è colorato secondo una **scala di colori** che va dal :orange[giallo] al :red[rosso], ovvero da una più bassa produzione di rifuti pro-capite ad una più alta.
+Vengono indicati in :grey[grigio] tutti gli stati che non sono oggetto di studio in quanto non appartenenti all'Unione Europea o che appartengono ma non  presentano dati per l'anno/settore selezionati.
+\nA lato è presente una legenda che mostra l'associazione tra colore e valore. Vista la natura dei dati, per rendere visibile la differenza tra paesi si è adottata una scala "square root".
+\n 💡 _Posizionandosi con il cursore sopra agli stati colorati nella cartina è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e il corrispettivo *valore* di rifiuti prodotti in kg pro-capite_ 
+
+         ''')
+
+@st.cache_data   
+def get_geography():
+    url = "https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip"
+    dati = gpd.read_file(url)
+    return dati
+
+world= get_geography()
+data = world.merge(data_kg.to_pandas(), left_on="ADMIN", right_on="geo")
+
+def add_map(chart):
+    chart.save("map.html")
+    with open("map.html") as fp:
+        st.components.v1.html(fp.read(), width=800, height=800)
+world = (
+    alt.Chart(world)
+    .properties(width=600, height=600)
+    .mark_geoshape(color="lightgray", stroke="white")
+)
+chart = (
+    alt.Chart(data)
+    .properties(width=600, height=600)
+    .mark_geoshape(stroke="white")
+    .encode(
+        alt.Color("kg_pro_capite").scale(scheme="yelloworangered", type="sqrt"), 
+        alt.Tooltip(["ADMIN", "kg_pro_capite"])
+    )
+)
+complete = (world + chart).project(  
+        type="azimuthalEqualArea",
+        scale=700,
+        center=(10, 48)
+)
+add_map(complete)
