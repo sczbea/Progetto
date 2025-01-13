@@ -18,7 +18,7 @@ with st.sidebar:
 - Generazione di rifiuti pro-capite (in kg) per settore e anno
     - Grafico a barre
     - Cartina d'Europa
-- Conclusioni          
+        
              ''')
     st.divider()
 
@@ -314,7 +314,8 @@ st.write('''
 ### Qual è il settore prevalente in ogni paese?
 Il seguente grafico rappresenta la quantità di **rifiuti** generati (in tonnellate) da un paese in un dato anno suddivisa **per attività economiche(e familiare)**.
 I valori sono rappresentati da delle barre ordinate in ordine decrescente in modo da mettere in risalto il settore **prevalente**. 
-\nE' possibile scegliere l'anno e il paese che si è più interessati ad osservare, oltre alla modalità di rappresentazione: grafica o tabellare
+\nE' possibile scegliere l'anno e il paese che si è più interessati ad osservare, oltre alla modalità di rappresentazione: grafica o tabellare.
+Si ricorda, inoltre, che per gli anni 2020-2022 non sono presenti dati per il Regno Unito!
 \nNell'asse delle ascisse sono riportate le **tonnellate** di rifiuti prodotti, mentre in quello delle ordinate i *settori*.
          
 \n 💡 _Posizionandosi con il cursore sopra le barre è possibile visualizzare "un'etichetta" che riporta le tonnellate di rifuti prodotti e il settore a cui si riferiscono_
@@ -359,12 +360,19 @@ if st.button("Osservazioni", icon="🔎", key="k"):
     st.write('''
 
 - settore: **"All NACE activities plus households"**
-> Ancora una volta si possono considerare le attività nel loro complesso, ma in questo caso con misurazione in kg pro-capite
+> Ancora una volta si possono considerare le attività nel loro complesso, ma in questo caso con misurazione in kg pro-capite. Che tipo di cambiamento comporta questo passaggio di unità di misura?
+
+> Si nota che, mentre con la misurazione in tonnellate primeggiavano ogni anno Germania e Francia, con la rilevazione pro-capite la situazione è molto diversa. Emergono in particolare Finlandia, Estonia,Luxembourg, Svezia e Bulgaria.
+ Nel 2022 ha avuto un considerevole incremento anche la Serbia.
              
-- anni: **2018, 2020, 2022** / settore: **"Household"**
-> Potrebbe essere interessante considerare l'ambito familiare, quindi ciò che riguarda i consumi domestici, in quanto non è limitato alle attività economiche ma rigurda tutte le persone. 
-  In particolare si possono considerare gli ultimi anni caratterizzati da un'emergenza climatica sempre più allarmante. Quanto può questo aver influenzato i consumi domestici nei diversi paesi? 
-             
+- settore: **"Household"**
+> Potrebbe essere interessante considerare l'ambito familiare, quindi ciò che riguarda i consumi domestici, in quanto è qualcosa che coinvolge tutte le persone e non solo alcuni settori economici. 
+
+> Si possono considerare gli ultimi anni per vedere se c'è stato una diminuzione della quantità dei rifiuti prodotti in seguito all'aumento della sensibilizzazione per temi di salvaguardia dell'ambiente. 
+ Si nota che mentre nel 2016, 2018, 2020 tutti gli stati avevano valori molto simili, nel 2022 i paesi del Nord ed Est Europa presentano un abbassamento rispetto agli altri
+
+> Molto interessante è anche l'**anno 2012**. Il Liliechtenstein presenta, infatti, un valore spropositato che fa sembrare tutti glia altri paesi molto bassi quando in realtà hanno valori molto simili a quelli degli anni precedenti.
+
              ''')
 
 def select_activity(key):
@@ -397,12 +405,12 @@ st.divider()
 st.write('''
 ##### Grafico a barre
 Una prima visualizzazione dei dati è fornita dal seguente grafico avente nell'asse delle ascisse i *paesi* e in quello delle ordinate i *rifiuti in kg pro-capite*.
-Sopra ad ogni barra vi è il valore di rifiuti corrispondente al paese per l'anno e il settore selezionati.
+\n 💡 _Posizionandosi con il cursore sopra le barre è possibile visualizzare "un'etichetta" che riporta il paese e i corrispettivi kg pro capite_
+
 ''')
 base = alt.Chart(data_kg).encode(
     y=alt.Y('kg_pro_capite:Q').axis(titleColor="black"),
     x=alt.X("geo:O", sort="-y").axis(titleColor="black"),
-    text='kg_pro_capite'
 )
 base.mark_bar() + base.mark_text(align='center', dy=-6)
 
@@ -449,10 +457,3 @@ complete = (world + chart).project(
         center=(10, 48)
 )
 add_map(complete)
-
-st.divider()
-
-st.write('''
-### Conclusione
-         
-         ''')
