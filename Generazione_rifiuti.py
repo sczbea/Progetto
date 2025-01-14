@@ -49,7 +49,7 @@ altri incenerimenti, smaltimento a terra e trattamento a terra) e in categorie d
 
 if st.button("📍 Fonti "):
     st.write(f'''
-I dati in seguito analizzati provengono dal sito Eurostat, in particolare ci si riferisce ai database:
+I dati in seguito analizzati provengono dal sito **Eurostat**, in particolare ci si riferisce ai database:
 - [Generation of waste by waste category, hazardousness and NACE Rev. 2 activity]({url1})
 
 - [Real GDP per capita]({url2})
@@ -446,7 +446,7 @@ complete = (world + chart).project(
         center=(10, 48)
 )
 add_map(complete)
-
+st.divider()
 st.write('''
 ### Conclusioni
 I principali aspetti che sono emersi da questo breve studio sulla generazione di rifiuti da parte dei paesi europei sulla base degli anni(dal 2004 al 2022) e degli ambiti economici e familiare sono:
