@@ -2,9 +2,10 @@
 
 ## Run
 Per avviare l'applicazione è sufficiente digitare il comando **" uv run streamlit run Generazione_rifiuti.py"** sul terminale.
+
 Affinchè si riesca a visualizzare tutti i grafici e ad usare i link presenti è necessario essere connessi ad **internet**.
  
-L'applicazione va eseguita con il tema chiaro 
+L'applicazione va eseguita con il tema chiaro. 
 
 ## Descrizione dei dati 
 L'applicazione contiene un'analisi fatta sui dati riguardanti la generazione di rifiuti da parte dei Paesi Europei membri UE, con particolare attenzione alle attività economiche (e delle famiglie) coinvolte, alla pericolosità dei rifiuti e all' evoluzione nel tempo della quantità prodotta. Il database di partenza contiene anche informazioni sulle categorie di rifiuti, ma non si è considerata questa variabile in quanto non d'interesse per lo studio che si voleva fare. 
@@ -23,13 +24,19 @@ Lo scopo dell'analisi è:
 Oltre all'analisi di per sè, l'obiettivo dell'applicazione è quello di permettere all'utente che la utilizza di **interagire** liberamente con le funzionalità presenti, potendo scegliere quali dati osservare in base a ciò che più interessa, facendosi guidare talvolta dai suggerimenti ed osservazioni riportati.
 
 ## Preprocessing
-I dati originali non sono in forma tidy e presentano molte variabili per cui vi è stato un lavoro di manipolazione per renderli adatti al tipo di analisi che si intendeva fare. Vista la complessità si è deciso di creare una "tabella madre" che contenesse caratteristiche comuni a tutte le successive tabelle, le quali sono state poi lavorate individualmente filtrando le proprietà specifiche in base al loro scopo.
+I dati originali per entrambi i dataset non sono in forma tidy e presentano molte variabili per cui vi è stato un lavoro di manipolazione per renderli adatti al tipo di analisi che si intendeva fare. 
+
+Per il **primo database**, quello sui rifiuti, vista la complessità si è deciso di creare una "tabella madre" che contenesse caratteristiche comuni a tutte le successive tabelle, le quali sono state poi lavorate individualmente filtrando le proprietà specifiche in base al loro scopo. Nella tabella di partenza sono state tolte tutte le colonne che avevano valori uguali per tutte le unità come DATAFLOW, frequenza, e LAST UPDATE. E' stata eliminata anche la colonna delle flags. Si è tolta l'Albania perchè non informativa per nessun tipo di analisi e si è scelto di considerare le **categorie** di rifiuti nel loro complesso.
+Per riuscire a rendere visibile la tabella si è scelto di considerare solo le colonne con la pericolosità complessiva e con l'unità di misura le tonnellate. Si è fatta un'operazione di pivot tra tempo e valori e si sono ordinati i paesi per ordine alfabetico. Alcune tabelle successive sono state costruite a partire da questa con un'operazione di unpivot e filtraggio delle colonne necessarie, altre derivano dalla tabella madre in quanto necessitavano di una diversa unità di misura o della differenziazione tra pericolosità/non-pericolosità.
+
+Anche per il **secondo database**, quello sul PIL pro capite, sono state tolte le flags e tutte le colonne che avevano valori uguali per tutte le unità come DATAFLOW, frequenza, e LAST UPDATE. Come unità si è scelto l'euro per capita e per gli anni si sono considerati solo quelli compatibili con il primo database. Si è poi effettuato un pivot su tempo e valori seguito da un unpivot per creare una colonna anno contenente i gdp per capita.
+Per effettuare l'analisi sulla correlazione tra PIL e Kg pro capite è stato eseguito un inner join tra le due tabelle attraverso "geo" e "year".
 
 ### Strade alternative
 Vista la presenza di diversi valori nulli si era tentato di sostituirli con **previsioni** fatte sulla base dei dati presenti negli anni precedenti e futuri.
 I tentativi consistevano in:
-- raggruppamento per paese e settore e aggregazione dei valori applicando strategie "forward/backward" di sostituzione di valori nulli (funzioni group_by, agg, fill_null(strategy=)
-- interpolazione di una colonna year rispetto ad un'altra colonna year (funzione interpolate_by)
-- interpolazione tramite metodi "linear/nearest" (funzione interpolate(method=)
+- raggruppamento per paese e settore e aggregazione dei valori applicando strategie "forward/backward" di sostituzione di valori nulli (funzioni group_by(), agg(), fill_null(strategy=))
+- interpolazione di una colonna year rispetto ad un'altra colonna year (funzione interpolate_by())
+- interpolazione tramite metodi "linear/nearest" (funzione interpolate(method=))
 
  Purtroppo non è stato possibile raggiungere risultati soddisfacenti per cui si è deciso di procedere con i dati originali. 
