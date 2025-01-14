@@ -242,7 +242,7 @@ st.divider()
 
 st.write('''
 ### Correlazione tra PIL e totale di rifiuti prodotti (pro capite)
-Il seguente grafico di dispersione rappresenta la correlazione tra la **crescita economica pro capite** e la produzione di **rifiuti pro capite (in kg)** senza distinzione per settore. 
+Il seguente grafico di dispersione rappresenta la correlazione tra la **crescita economica pro capite**, misurata in euro pro capite, e la produzione di **rifiuti pro capite (in kg)** senza distinzione per settore. 
 Ogni :blue[punto] rappresenta un paese e il legame tra questi è evidenziato da una retta di regressione :red[rossa].   
 \nNell'asse delle ascisse è riportato il valore del *PIL pro capite*, mentre in quello delle ordinate i *kg pro capite* di rifiuti generati.
          
