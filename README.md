@@ -3,6 +3,8 @@
 ## Run
 Per avviare l'applicazione è sufficiente digitare il comando **" uv run streamlit run Generazione_rifiuti.py"** sul terminale.
 Affinchè si riesca a visualizzare tutti i grafici e ad usare i link presenti è necessario essere connessi ad **internet**.
+ 
+L'applicazione va eseguita con il tema chiaro 
 
 ## Descrizione dei dati 
 L'applicazione contiene un'analisi fatta sui dati riguardanti la generazione di rifiuti da parte dei Paesi Europei membri UE, con particolare attenzione alle attività economiche (e delle famiglie) coinvolte, alla pericolosità dei rifiuti e all' evoluzione nel tempo della quantità prodotta. Il database di partenza contiene anche informazioni sulle categorie di rifiuti, ma non si è considerata questa variabile in quanto non d'interesse per lo studio che si voleva fare. 
