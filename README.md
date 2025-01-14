@@ -35,8 +35,8 @@ Per effettuare l'analisi sulla correlazione tra PIL e Kg pro capite è stato ese
 ### Strade alternative
 Vista la presenza di diversi valori nulli si era tentato di sostituirli con **previsioni** fatte sulla base dei dati presenti negli anni precedenti e futuri.
 I tentativi consistevano in:
-- raggruppamento per paese e settore e aggregazione dei valori applicando strategie "forward/backward" di sostituzione di valori nulli (funzioni group_by, agg, fill_null(strategy=)
-- interpolazione di una colonna year rispetto ad un'altra colonna year (funzione interpolate_by)
-- interpolazione tramite metodi "linear/nearest" (funzione interpolate(method=)
+- raggruppamento per paese e settore e aggregazione dei valori applicando strategie "forward/backward" di sostituzione di valori nulli (funzioni group_by(), agg(), fill_null(strategy=))
+- interpolazione di una colonna year rispetto ad un'altra colonna year (funzione interpolate_by())
+- interpolazione tramite metodi "linear/nearest" (funzione interpolate(method=))
 
  Purtroppo non è stato possibile raggiungere risultati soddisfacenti per cui si è deciso di procedere con i dati originali. 
