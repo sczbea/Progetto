@@ -96,17 +96,6 @@ data= (
     .sort(["nace_r2", "geo", "year"])  
     )
 
-# non serve metterli ma è da scrivere sul read i tentativi fatti !!!!
-prev_data= (
-    table()
-    #data
-    #.group_by(["geo","nace_r2"])
-    #.agg(pl.col("values").fill_null(strategy="forward").alias("previsioni"))
-    #.with_columns(previsioni=pl.col("2004").interpolate_by("2006"))
-    .sort(["geo","nace_r2"])
-)
-#new_data= data.merge(prev_data, on="geo", how="left")
-
 st.divider()
 
 st.write('''
@@ -129,15 +118,13 @@ data1= (table()
         .filter(pl.col("geo") == ("European Union - 28 countries (2013-2020)" ),
                 pl.col("nace_r2") == "All NACE activities plus households")
         .pivot(on="year", values="values")
-        .with_columns(pl.col("2020").fill_null(2153170000),
-                      pl.col("2022").fill_null(2233120000))
+        .with_columns(pl.col("2020").fill_null(2153170000), # 2020 2153170000
+                      pl.col("2022").fill_null(2233120000)) # 2022 2233120000
         .unpivot(index=["geo", "nace_r2"], 
                       value_name="values", 
                       variable_name="year")
         .select(pl.col("*").exclude("geo", "nace_r2"))
         )
-# 2020 2153170000
-# 2022 2233120000
 
 line = alt.Chart(data1).mark_line(color="red").encode(
     x=alt.X('year').axis(labelAngle=-40, titleColor="black", title="Years"),
@@ -197,8 +184,6 @@ if st.button("Osservazioni", icon="🔎"):
         \nE' interessante, invece, notare come **Spagna**, **Romania** e **Bulgaria** abbiano un andamento *complessivamente decrescente*. 
         In particolare la Romania presenta un abbassamento significativo nel 2006 e 2012, mentre la Bulgaria a partire dal 2014.
          ''' )
-
-
 
 st.divider()
 
@@ -291,9 +276,7 @@ data_kg2= (start_data
             .with_columns(pl.col("kg_pro_capite").cast(pl.Float64))
         )
 
-GDP_waste=(
-    data_kg2.join(pil_table(), on=["geo", "year"], how="inner")
-)
+GDP_waste=(data_kg2.join(pil_table(), on=["geo", "year"], how="inner"))
 
 line= alt.Chart(GDP_waste).mark_point().encode(
         x=alt.X('GDP_per_capita:Q').axis(titleColor="black"),
@@ -307,19 +290,18 @@ points= alt.Chart(GDP_waste).mark_point(fill="blue").encode(
             width=600,
             height=400 
         )
-
 points+line
+
 st.divider()
+
 st.write('''
 ### Qual è il settore prevalente in ogni paese?
 Il seguente grafico rappresenta la quantità di **rifiuti** generati (in tonnellate) da un paese in un dato anno suddivisa **per attività economiche(e familiare)**.
 I valori sono rappresentati da delle barre ordinate in ordine decrescente in modo da mettere in risalto il settore **prevalente**. 
 \nE' possibile scegliere l'anno e il paese che si è più interessati ad osservare, oltre alla modalità di rappresentazione: grafica o tabellare.
 Si ricorda, inoltre, che per gli anni 2020-2022 non sono presenti dati per il Regno Unito!
-\nNell'asse delle ascisse sono riportate le *tonnellate* di rifiuti prodotti, mentre in quello delle ordinate i *settori*.
-         
+\nNell'asse delle ascisse sono riportate le *tonnellate* di rifiuti prodotti, mentre in quello delle ordinate i *settori*.         
 \n 💡 _Posizionandosi con il cursore sopra le barre è possibile visualizzare "un'etichetta" che riporta le tonnellate di rifuti prodotti e il settore a cui si riferiscono_
-
 ''')
 
 def select_country(key):
@@ -379,7 +361,6 @@ def select_activity(key):
     activities= data.select("nace_r2").unique().sort("nace_r2")
     activity= st.selectbox("Seleziona il settore", activities, key= key)
     return activity
-
 
 year= select_year("key1")
 nace= select_activity("key2")
