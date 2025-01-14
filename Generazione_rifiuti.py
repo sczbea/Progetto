@@ -93,7 +93,6 @@ st.write(table())
 # table()
 # .with_columns(previsioni=pl.col("2004").interpolate_by("2006"))
 
-
 data= (
     table()
     .unpivot(index=["geo", "nace_r2"], 
