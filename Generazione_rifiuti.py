@@ -18,6 +18,7 @@ with st.sidebar:
 - Generazione di rifiuti pro-capite (in kg) per settore e anno
     - Grafico a barre
     - Cartina d'Europa
+- Conclusioni
         
              ''')
     st.divider()
@@ -201,7 +202,7 @@ Il seguente grafico evidenzia quali sono gli stati che producono la **maggiore q
 tonnellate prodotte da ogni settore economico in riferimento all'anno selezionato. E' possibile scegliere l'anno che si desidera considerare.
 \nNell'asse delle ascisse è riportato il *valore* della quantità di rifuti prodotti in tonnellate, mentre in quello delle ordinate gli *stati*.         
 \n Si osserva che per tutti gli stati la proporzione di scarti **non-pericolosi** è nettamente superiore a quella dei pericolosi. 
-**Germania** e **Francia** sembrano essere gli stati che ogni anno generano la maggiore quantità di rifiuti.
+**Germania** e **Francia** sembrano essere gli stati che ogni anno generano la maggiore quantità di rifiuti, seguite da **Italia**, **Polonia** e **Regno Unito**.
 
 \n 💡 _Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il nome del paese e il corrispettivo valore di rifiuti totali_
 
@@ -445,3 +446,12 @@ complete = (world + chart).project(
         center=(10, 48)
 )
 add_map(complete)
+
+st.write('''
+### Conclusioni
+I principali aspetti che sono emersi da questo breve studio sulla generazione di rifiuti da parte dei paesi europei sulla base degli anni(dal 2004 al 2022) e degli ambiti economici e familiare sono:
+         1- I 27 paesi considerati presentano nel loro complesso un lieve aumento nel corso degli anni. Gli stati presi singolarmente presentano oscillazioni ma con un andamento complessivo crescente, tranne alcune eccezioni
+         2- Gli stati che producono la maggiore quantità di rifiuti in tonnellate sono principalmente Germania e Francia, ma principalmente si tratta di rifiuti non-pericolosi
+         3- La correlazione tra PIL reale pro capite e rifiuti generati in kg pro capite sembra positiva, ma non si tratta di una relazione forte e sono presenti diversi "outliers"
+Quelle presentate qui sono solo alcune delle considerazioni che si possono fare. Altri risultati possono essere osservati intervenendo attivamente sui dati messi a disposizione.
+         ''')
