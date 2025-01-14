@@ -208,7 +208,7 @@ st.write('''
 Il seguente grafico evidenzia quali sono gli stati che producono la **maggiore quantità di scarti** considerando la somma delle 
 tonnellate prodotte da ogni settore economico in riferimento all'anno selezionato. E' possibile scegliere l'anno che si desidera considerare.
 \nNell'asse delle ascisse è riportato il *valore* della quantità di rifuti prodotti in tonnellate, mentre in quello delle ordinate gli *stati*.         
-\n Si osserva che per tutti gli stati la proporzione di scarti **non-pericolosi** è nettamente superiore di quella dei pericolosi. 
+\n Si osserva che per tutti gli stati la proporzione di scarti **non-pericolosi** è nettamente superiore a quella dei pericolosi. 
 **Germania** e **Francia** sembrano essere gli stati che ogni anno generano la maggiore quantità di rifiuti.
 
 \n 💡 _Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il nome del paese e il corrispettivo valore di rifiuti totali_
@@ -316,7 +316,7 @@ Il seguente grafico rappresenta la quantità di **rifiuti** generati (in tonnell
 I valori sono rappresentati da delle barre ordinate in ordine decrescente in modo da mettere in risalto il settore **prevalente**. 
 \nE' possibile scegliere l'anno e il paese che si è più interessati ad osservare, oltre alla modalità di rappresentazione: grafica o tabellare.
 Si ricorda, inoltre, che per gli anni 2020-2022 non sono presenti dati per il Regno Unito!
-\nNell'asse delle ascisse sono riportate le **tonnellate** di rifiuti prodotti, mentre in quello delle ordinate i *settori*.
+\nNell'asse delle ascisse sono riportate le *tonnellate* di rifiuti prodotti, mentre in quello delle ordinate i *settori*.
          
 \n 💡 _Posizionandosi con il cursore sopra le barre è possibile visualizzare "un'etichetta" che riporta le tonnellate di rifuti prodotti e il settore a cui si riferiscono_
 
@@ -352,13 +352,13 @@ st.write('''
 I 27 paesi membri dell'UE presentano naturalmente **dimensioni** geografiche, e quindi demografiche, **diverse**.
 Ciò implica che stati più grandi e più densamente popolati produrranno una maggiore quantità di rifiuti rispetto a quelli più piccoli.
 \nAllora la domanda che sorge spontanea è: come possiamo rendere i paesi confrontabili?
-    Consideriamo un'altra unità di misura che li metta tutti sullo stesso piano: i kg pro-capite.
+    Si può considerare un'altra unità di misura che li metta tutti sullo stesso piano: i **kg pro-capite**.
 \nIn questa sezione è possibile scegliere l'**anno** e il **settore economico** dei dati che si è interessati a visualizzare.
          ''')
 
 if st.button("Osservazioni", icon="🔎", key="k"):
     st.write('''
-
+I dati si prestano a molteplici combinazioni. Vengono qui riportati alcuni suggerimenti di ricerca che potrebbero essere interessanti:
 - settore: **"All NACE activities plus households"**
 > Ancora una volta si possono considerare le attività nel loro complesso, ma in questo caso con misurazione in kg pro-capite. Che tipo di cambiamento comporta questo passaggio di unità di misura?
 
@@ -371,7 +371,7 @@ if st.button("Osservazioni", icon="🔎", key="k"):
 > Si possono considerare gli ultimi anni per vedere se c'è stato una diminuzione della quantità dei rifiuti prodotti in seguito all'aumento della sensibilizzazione per temi di salvaguardia dell'ambiente. 
  Si nota che mentre nel 2016, 2018, 2020 tutti gli stati avevano valori molto simili, nel 2022 i paesi del Nord ed Est Europa presentano un abbassamento rispetto agli altri
 
-> Molto interessante è anche l'**anno 2012**. Il Liliechtenstein presenta, infatti, un valore spropositato che fa sembrare tutti glia altri paesi molto bassi quando in realtà hanno valori molto simili a quelli degli anni precedenti.
+> Molto interessante è anche l'**anno 2012** in quanto il Liliechtenstein presenta un valore spropositato che fa sembrare tutti glia altri paesi molto bassi quando in realtà hanno valori molto simili a quelli degli anni precedenti.
 
              ''')
 
@@ -416,7 +416,7 @@ base.mark_bar() + base.mark_text(align='center', dy=-6)
 
 st.write('''
     ##### Cartina dell'Europa
-Un'ulteriore rappresentazione che permette un confronto visivo più chiaro è la seguente cartina d'Europa.
+Un'ulteriore rappresentazione che permette un confronto visivo più immediato è la seguente cartina d'Europa.
 \nOgni pease è colorato secondo una **scala di colori** che va dal giallo al rosso, ovvero da una più bassa produzione di rifuti pro-capite ad una più alta.
 Vengono indicati in grigio tutti gli stati che non sono oggetto di studio in quanto non appartenenti all'Unione Europea o che appartengono ma non  presentano dati per l'anno/settore selezionati.
 \nA lato è presente una **legenda** che mostra l'associazione tra colore e valore. Vista la natura dei dati, per rendere visibile la differenza tra paesi si è adottata una scala "square root".
