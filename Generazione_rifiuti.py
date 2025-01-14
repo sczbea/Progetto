@@ -86,6 +86,14 @@ def table():
     )
 st.write(table())
 
+#  data
+# .group_by(["geo","nace_r2"])
+# .agg(pl.col("values").fill_null(strategy="forward/backward").alias("previsioni"))
+
+# table()
+# .with_columns(previsioni=pl.col("2004").interpolate_by("2006"))
+
+
 data= (
     table()
     .unpivot(index=["geo", "nace_r2"], 
