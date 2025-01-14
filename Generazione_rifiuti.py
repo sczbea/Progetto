@@ -11,6 +11,7 @@ with st.sidebar:
     - Fonti
 - Presentazione dei dati
 - Evoluzione temporale 
+    - 27 peasi nel loro complesso
     - Confronto tra paesi
 - Produzione totale di rifiuti per pericolosità e anno
 - Settore prevalente per paese e anno
@@ -453,5 +454,5 @@ I principali aspetti che sono emersi da questo breve studio sulla generazione di
 - I 27 paesi considerati presentano nel loro complesso un lieve aumento nel corso degli anni. Gli stati presi singolarmente presentano oscillazioni ma con un andamento complessivo crescente, tranne alcune eccezioni
 - Gli stati che producono la maggiore quantità di rifiuti in tonnellate sono Germania e Francia, ma principalmente si tratta per tutti di rifiuti non-pericolosi
 - La correlazione tra PIL reale pro capite e rifiuti generati in kg pro capite sembra positiva, ma non si tratta di una relazione forte e va tenuta conto la presenza di diversi "outliers"
-\nQuelle presentate qui sono solo alcune delle considerazioni che si possono fare. Altri risultati possono essere osservati intervenendo attivamente sui dati messi a disposizione.
+\nQuelle presentate qui sono solo alcune delle considerazioni che si possono fare. Altri risultati possono essere osservati intervenendo attivamente sui grafici messi a disposizione.
          ''')
