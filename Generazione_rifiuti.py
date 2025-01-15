@@ -111,9 +111,9 @@ st.write('''
 ### Evoluzione temporale della produzione di rifiuti
 #### Considerazione dei 27 paesi UE nel loro complesso         
  Il seguente grafico mette in luce l'evoluzione della produzione **totale** di rifiuti negli anni dal 2004 al 2022 da parte dei paesi oggetto di studio, **senza distinzione per attività economica**.
-\nNel periodo 2004 -2020 vengono considerati **tutti i 27 paesi**   , mentre per l'intervallo 2020 - 2022 i valori si riferiscono a 26 paesi in quanto L'Inghilterra, uscendo dall'UE, non ha più fornito i propri dati.
+Nel periodo 2004 -2020 vengono considerati **tutti i 27 paesi**   , mentre per l'intervallo 2020 - 2022 i valori si riferiscono a 26 paesi in quanto l'Inghilterra, uscendo dall'UE, non ha più fornito i propri dati.
   
-\nIl calo degli ultimi 2 anni (2020-2022) va attribuito alla mancanza di un paese nel conteggio più che ad un' effettiva diminuzione della produzione di rifiuti. 
+\n Il **calo** degli ultimi 2 anni (2020-2022) va attribuito alla mancanza di un paese nel conteggio più che ad un' effettiva diminuzione della produzione di rifiuti. 
 Si può invece ipotizzare che, tenendo conto dell'andamento passato, il totale sarebbe stato in lieve aumento o pressocchè stazionario.
 \n Nell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno in tonnellate.
 \n 💡 _Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il corrispettivo anno e il valore di rifiuti totali.
@@ -248,11 +248,11 @@ Ogni :blue[punto] rappresenta un paese e il legame tra questi è evidenziato da 
          
 \n E' da notare  la presenza di alcuni **valori anomali** (detti "outliers") che influenzano la retta di regressione diminuendone la pendenza. 
  La retta non sembra, infatti, adattarsi al meglio ai dati, nonostante parga esserci una correlazione tra le due variabili.
- Anche la scarsa numerosità di dati(solo 27) non aiuta, ma si pùò individuare una lieve **correlazione positiva** per cui, 
+ Anche la scarsa numerosità di dati(solo 27) non aiuta, ma si può individuare una lieve **correlazione positiva** per cui, 
  generalmente, all'aumentare del valore del PIL pro-capite aumenta il valore di kg di rifiuti prodotti pro capite. 
  Poichè alcuni dati presentano una relazione decisamente diversa è probabile che ci siano fattori non osservati in questo studio che hanno un'incidenza significativa.
          
-\n 💡 _Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro capite* e il *PIL pro capite*_. 
+\n 💡 _Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro capite* e il *PIL pro capite*_ 
       
          ''')
 
@@ -360,9 +360,9 @@ I dati si prestano a molteplici combinazioni. Vengono qui riportati alcuni sugge
 > Potrebbe essere interessante considerare l'ambito familiare, quindi ciò che riguarda i consumi domestici, in quanto è qualcosa che coinvolge tutte le persone e non solo alcuni settori economici. 
 
 > Si possono considerare gli ultimi anni per vedere se c'è stato una diminuzione della quantità dei rifiuti prodotti in seguito all'aumento della sensibilizzazione per temi di salvaguardia dell'ambiente. 
- Si nota che mentre nel 2016, 2018, 2020 tutti gli stati avevano valori molto simili, nel 2022 i paesi del Nord ed Est Europa presentano un abbassamento rispetto agli altri
+ Si nota che mentre nel 2016, 2018, 2020 tutti gli stati avevano valori molto simili, nel 2022 i paesi del Nord ed Est Europa presentano un abbassamento rispetto agli altri.
 
-> Molto interessante è anche l'**anno 2012** in quanto il Liliechtenstein presenta un valore spropositato che fa sembrare tutti glia altri paesi molto bassi quando in realtà hanno valori molto simili a quelli degli anni precedenti.
+> Molto interessante è anche l'**anno 2012** in quanto il Liechtenstein presenta un valore spropositato che fa sembrare tutti gli altri paesi molto bassi quando in realtà hanno valori molto simili a quelli degli anni precedenti.
 
              ''')
 
@@ -450,7 +450,7 @@ add_map(complete)
 st.divider()
 st.write('''
 ### Conclusioni
-I principali aspetti che sono emersi da questo breve studio sulla generazione di rifiuti da parte dei paesi europei sulla base degli anni(dal 2004 al 2022) e degli ambiti economici e familiare sono:
+I principali aspetti che sono emersi da questo breve studio sulla generazione di rifiuti da parte dei paesi europei sulla base degli anni dal 2004 al 2022 e degli ambiti economici e familiare sono:
 - I 27 paesi considerati presentano nel loro complesso un lieve aumento nel corso degli anni. Gli stati presi singolarmente presentano oscillazioni ma con un andamento complessivo crescente, tranne alcune eccezioni
 - Gli stati che producono la maggiore quantità di rifiuti in tonnellate sono Germania e Francia, ma principalmente si tratta per tutti di rifiuti non-pericolosi
 - La correlazione tra PIL reale pro capite e rifiuti generati in kg pro capite sembra positiva, ma non si tratta di una relazione forte e va tenuta conto la presenza di diversi "outliers"
