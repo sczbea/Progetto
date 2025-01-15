@@ -9,13 +9,13 @@ with st.sidebar:
     st.write('''
 - Introduzione e descrizione dei dati
     - Fonti
-- Presentazione dei dati
+- Tabella dei dati
 - Evoluzione temporale 
     - 27 peasi nel loro complesso
     - Confronto tra paesi
 - Produzione totale di rifiuti per pericolosità e anno
 - Settore prevalente per paese e anno
-- Correlazione tra PIL e totale di rifiuti prodotti (pro capite) per anno
+- Correlazione tra PIL e totale di rifiuti pro-capite (in kg) per anno
 - Generazione di rifiuti pro-capite (in kg) per settore e anno
     - Grafico a barre
     - Cartina d'Europa
@@ -58,7 +58,7 @@ I dati in seguito analizzati provengono dal sito **Eurostat**, in particolare ci
 st.divider()
 
 st.write('''
-### Presentazione dei dati
+### Tabella dei dati
 La **tabella** riporta i dati sulla produzione di rifiuti (in tonnellate) nei diversi settori economici per ogni paese membro dell'UE.
 
 Per comodità di *rappresentazione* si sono qui considerati i rifiuti pericolosi e non pericolosi nel loro totale.
