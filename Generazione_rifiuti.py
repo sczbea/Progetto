@@ -45,7 +45,7 @@ dei settori "Agricolture and fishing" e "Services", perciò per alcuni paesi que
 Le informazioni sul trattamento dei rifiuti sono suddivise in 5 tipologie di **trattamento** (recupero, incenerimento con recupero energetico, 
 altri incenerimenti, smaltimento a terra e trattamento a terra) e in categorie di rifiuti.
 
-\n *A lato è possibile visualizzare un **indice** dei punti che si analizzeranno nel corso dell'analisi. Per visualizzarlo è sufficente cliccare sulla freccia in alto a sinistra*
+\n *A lato è possibile visualizzare un **indice** dei punti che si analizzeranno nel corso dell'analisi. Per visualizzarlo, o eventualmente nasconderlo, è sufficente cliccare sulla freccia in alto a sinistra della pagina*
 ''')
 
 if st.button("📍 Fonti "):
@@ -112,10 +112,9 @@ st.write('''
 #### Considerazione dei 27 paesi UE nel loro complesso         
  Il seguente grafico mette in luce l'evoluzione della produzione **totale** di rifiuti negli anni dal 2004 al 2022 da parte dei paesi oggetto di studio, **senza distinzione per attività economica**.
 Nel periodo 2004 -2020 vengono considerati **tutti i 27 paesi**   , mentre per l'intervallo 2020 - 2022 i valori si riferiscono a 26 paesi in quanto l'Inghilterra, uscendo dall'UE, non ha più fornito i propri dati.
-  
+\n Nell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno in tonnellate.
 \n Il **calo** degli ultimi 2 anni (2020-2022) va attribuito alla mancanza di un paese nel conteggio più che ad un' effettiva diminuzione della produzione di rifiuti. 
 Si può invece ipotizzare che, tenendo conto dell'andamento passato, il totale sarebbe stato in lieve aumento o pressocchè stazionario.
-\n Nell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno in tonnellate.
 \n 💡 _Posizionandosi con il cursore sopra alle barre è possibile visualizzare "un'etichetta" che riporta il corrispettivo anno e il valore di rifiuti totali.
 Si può anche scegliere di visualizzare i dati in forma tabellare cliccando sopra "Data"_
 
@@ -160,7 +159,7 @@ Come si presenta rispetto agli altri?
 Il grafico permette poi di effettuare un **confronto**, osservandone al contempo l'**evoluzione individuale**.
 
 Nell'asse delle ascisse sono riportati gli *anni*, mentre in quello delle ordinate i *valori* per ogni anno, i quali
-corrispondo alla somma di rifiuti prodotti per ogni settore.
+corrispondono alla somma di rifiuti prodotti per ogni settore.
 Man mano che verranno selezionati i paesi apparirà una legenda sotto al grafico con il nome dello stato e il rispettivo colore. 
 \n 💡 _Posizionandosi con il cursore sopra alle linee è possibile visualizzare "un'etichetta" che riporta l'anno considerato, il nome del paese e il corrispettivo valore di rifiuti totali_
 """)
@@ -246,12 +245,6 @@ Il seguente grafico di dispersione rappresenta la correlazione tra la **crescita
 Ogni :blue[punto] rappresenta un paese e il legame tra questi è evidenziato da una retta di regressione :red[rossa].   
 \nNell'asse delle ascisse è riportato il valore del *PIL pro capite*, mentre in quello delle ordinate i *kg pro capite* di rifiuti generati.
          
-\n E' da notare  la presenza di alcuni **valori anomali** (detti "outliers") che influenzano la retta di regressione diminuendone la pendenza. 
- La retta non sembra, infatti, adattarsi al meglio ai dati, nonostante parga esserci una correlazione tra le due variabili.
- Anche la scarsa numerosità di dati(solo 27) non aiuta, ma si può individuare una lieve **correlazione positiva** per cui, 
- generalmente, all'aumentare del valore del PIL pro-capite aumenta il valore di kg di rifiuti prodotti pro capite. 
- Poichè alcuni dati presentano una relazione decisamente diversa è probabile che ci siano fattori non osservati in questo studio che hanno un'incidenza significativa.
-         
 \n 💡 _Posizionandosi con il cursore sopra ai punti è possibile visualizzare "un'etichetta" che riporta il nome del *paese* e i corrispettivi valori di rifiuti prodotti in *kg pro capite* e il *PIL pro capite*_ 
       
          ''')
@@ -301,6 +294,13 @@ points= alt.Chart(GDP_waste).mark_point(fill="blue").encode(
         )
 points+line
 
+st.write('''
+ E' da notare  la presenza di alcuni **valori anomali** (detti "outliers") che influenzano la retta di regressione diminuendone la pendenza. 
+ La retta non sembra, infatti, adattarsi al meglio ai dati, nonostante parga esserci una correlazione tra le due variabili.
+ Anche la scarsa numerosità di dati(solo 27) non aiuta, ma si può individuare una lieve **correlazione positiva** per cui, 
+ generalmente, all'aumentare del valore del PIL pro-capite aumenta il valore di kg di rifiuti prodotti pro capite. 
+ Poichè alcuni dati presentano una relazione decisamente diversa è probabile che ci siano fattori non osservati in questo studio che hanno un'incidenza significativa.
+ ''')
 st.divider()
 
 st.write('''
@@ -346,25 +346,26 @@ Ciò implica che stati più grandi e più densamente popolati produrranno una ma
     Si può considerare un'altra unità di misura che li metta tutti sullo stesso piano: i **kg pro-capite**.
 \nIn questa sezione è possibile scegliere l'**anno** e il **settore economico** dei dati che si è interessati a visualizzare.
          ''')
-
-if st.button("Osservazioni", icon="🔎", key="k"):
-    st.write('''
-I dati si prestano a molteplici combinazioni. Vengono qui riportati alcuni suggerimenti di ricerca che potrebbero essere interessanti:
+st.divider()
+st.write('''
+🔎 **Osservazioni**
+\nI dati si prestano a molteplici combinazioni. Vengono qui riportati alcuni suggerimenti di ricerca che potrebbero essere interessanti:
 - settore: **"All NACE activities plus households"**
 > Ancora una volta si possono considerare le attività nel loro complesso, ma in questo caso con misurazione in kg pro-capite. Che tipo di cambiamento comporta questo passaggio di unità di misura?
 
-> Si nota che, mentre con la misurazione in tonnellate primeggiavano ogni anno Germania e Francia, con la rilevazione pro-capite la situazione è molto diversa. Emergono in particolare Finlandia, Estonia,Luxembourg, Svezia e Bulgaria.
- Nel 2022 ha avuto un considerevole incremento anche la Serbia.
+> Si nota che, mentre con la misurazione in tonnellate primeggiavano ogni anno Germania e Francia, con la rilevazione pro-capite la situazione è molto diversa. Emergono in particolare **Finlandia, Estonia, Luxembourg, Svezia e Bulgaria**.
+ Nel **2022** ha avuto un considerevole incremento anche la **Serbia**.
              
 - settore: **"Household"**
 > Potrebbe essere interessante considerare l'ambito familiare, quindi ciò che riguarda i consumi domestici, in quanto è qualcosa che coinvolge tutte le persone e non solo alcuni settori economici. 
 
 > Si possono considerare gli ultimi anni per vedere se c'è stato una diminuzione della quantità dei rifiuti prodotti in seguito all'aumento della sensibilizzazione per temi di salvaguardia dell'ambiente. 
- Si nota che mentre nel 2016, 2018, 2020 tutti gli stati avevano valori molto simili, nel 2022 i paesi del Nord ed Est Europa presentano un abbassamento rispetto agli altri.
+ Si nota che mentre nel 2016, 2018, 2020 tutti gli stati avevano valori molto simili, nel **2022** i paesi del **Nord ed Est Europa** presentano un abbassamento rispetto agli altri.
 
-> Molto interessante è anche l'**anno 2012** in quanto il Liechtenstein presenta un valore spropositato che fa sembrare tutti gli altri paesi molto bassi quando in realtà hanno valori molto simili a quelli degli anni precedenti.
+> Molto interessante è anche l'**anno 2012** in quanto il **Liechtenstein** presenta un valore spropositato che fa sembrare tutti gli altri paesi molto bassi quando in realtà hanno valori molto simili a quelli degli anni precedenti.
 
              ''')
+st.divider()
 
 def select_activity(key):
     activities= data.select("nace_r2").unique().sort("nace_r2")

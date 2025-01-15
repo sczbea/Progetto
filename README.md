@@ -2,8 +2,9 @@
 
 ## Run
 Per avviare l'applicazione è sufficiente digitare il comando **" uv run streamlit run Generazione_rifiuti.py"** sul terminale.
+Per chi ha Windows potrebbe essere necessario aggiungere -n, quindi **" uv run -n streamlit run Generazione_rifiuti.py"**.
 
-Affinchè si riesca a visualizzare tutti i grafici e ad usare i link presenti è necessario essere connessi ad **internet**.
+Affinchè si riescano a visualizzare tutti i grafici e funzionino i link presenti è necessario essere connessi ad **internet**.
  
 L'applicazione va eseguita con il tema chiaro. 
 
